@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>pokeapi</title>
+
+</head>
+<body>
+    <input id="pokemon" placeholder="Pokemon Name"/>
+    <button onclick="buscarPokemon()">Buscar</button>
+    <div id="insertPokemon"></div>
+</body>
+<script>
+    async function buscarPokemon() {
+        const div = document.getElementById("insertPokemon");
+        div.innerHTML = "";
+        const pokemonName = document.getElementById("pokemon");
+        // console.log("pokemon:" + pokemonName.value);
+        const response = await fetch(`https://pokeapi.co/api/v2/pokemon/${pokemonName.value}`);
+        const pokemon = await response.json();
+        console.log(pokemon);
+        const h3 = document.createElement("h3");
+        h3.innerText = pokemon.name;
+        const image = document.createElement("img");
+        image.src = pokemon.sprites.front_default;
+        div.appendChild(h3);
+        div.appendChild(image);
+    };
+    buscarPokemon();
+</script>
+</html>

@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="pokemonDetails.css">
+        <title>pokeapi</title>
+</head>
+<body>
+    <div>
+        <h2>Pokemon browser</h3>
+    </div>
+    <div class="row">
+        <div class="col-2">
+            <div class="fixed">
+                <h3>Paginacion</h3>
+                <div class="row">
+                    <label for="quantity" style="margin-right: 10px;">Show</label>
+                    <select name="quantity" id="amount" onchange="changeTotal()">
+                        <option value="5">5</option>
+                        <option value="10" selected>10</option>
+                        <option value="15">15</option>
+                        <option value="20">20</option>
+                    </select>
+                </div>
+                <!-- <div class="row">
+                    <div class="pagination">
+                        <a href="#">&laquo;</a>
+                        <a href="#">1</a>
+                        <a class="active" href="#">2</a>
+                        <a href="#">3</a>
+                        <a href="#">4</a>
+                        <a href="#">5</a>
+                        <a href="#">6</a>
+                        <a href="#">&raquo;</a>
+                      </div>
+                </div> -->
+            </div>
+        </div>
+        <div class="col-4">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Pokemon</th>
+                        <th>Image</th>
+                    </tr>
+                </thead>
+                <tbody id="pokemon-list">
+                </tbody>
+            </table>    
+        </div>
+        <div class="col-4" style="position: relative;">
+                <div class="fixed row">
+                    <div id="details-div"></div>
+                </div>
+            <!-- <pokemon-details name=""></pokemon-details> -->
+        </div>
+    </div>
+</body>
+<script src="pokemonDetails.js"></script>
+<script>
+    let totalPokemon = 0;
+    let selectedPokemon = "";
+    async function getPokemon() {
+        const amount = document.getElementById("amount").value;
+        const skip = 0;
+        const response = await fetch(`https://pokeapi.co/api/v2/pokemon/?limit=${amount}&offset=${skip}`);
+        const json = await response.json();
+        totalPokemon = json.count;
+        const pokemon = json.results;
+        selectedPokemon = pokemon[0].name;
+        const detailsDiv = document.getElementById("details-div");
+        const details = document.createElement("pokemon-details");
+        details.setAttribute("name", selectedPokemon);
+        detailsDiv.appendChild(details);
+        await fillTable(pokemon);
+    }
+    getPokemon();
+
+    async function fillTable(pokemon) {
+        const tbody = document.getElementById("pokemon-list");
+        tbody.innerHTML = "";
+        pokemon.forEach(async element => {
+            const row = document.createElement("tr");
+            row.classList.add("pokemon");
+            const name = document.createElement("td");
+            const image = document.createElement("td");
+            const imageSrc = document.createElement("img");
+            const link = document.createElement("a");
+            link.href = "/"
+            name.innerText = element.name;
+            imageSrc.src = await getPokemonImage(element.url);
+            imageSrc.style.cursor = "pointer";
+            imageSrc.setAttribute("data-name", element.name);
+            imageSrc.onclick = function() {
+                const detailsDiv = document.getElementById("details-div");
+                detailsDiv.innerHTML = "";
+                const details = document.createElement("pokemon-details");
+                details.setAttribute("name", this.dataset.name);
+                detailsDiv.appendChild(details);
+            };
+            image.appendChild(imageSrc);
+            row.appendChild(name);
+            row.appendChild(image);
+            tbody.appendChild(row);
+        });
+    }
+
+    async function getPokemonImage(url) {
+        const response = await fetch(url);
+        const pokemon = await response.json();
+        return pokemon.sprites.front_default;
+    }
+
+    async function changeTotal() {
+        const amount = document.getElementById("amount").value;
+        const skip = 0;
+        const response = await fetch(`https://pokeapi.co/api/v2/pokemon/?limit=${amount}`);
+        const json = await response.json();
+        totalPokemon = json.count;
+        const pokemon = json.results;
+        await fillTable(pokemon);
+    }
+
+</script>
+</html>

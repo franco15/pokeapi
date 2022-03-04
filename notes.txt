@@ -1,0 +1,12 @@
+the road to react
+nestjs
+nextjs
+
+https://pokeapi.co/
+
+usar solo vanilla js
+1. generar un lista de pokemon con paginacion
+2. tener dos paginas, una con la lista y otra para buscar
+3. al seleionar un pokemon de la lista debeb de mostrarte su informacion en una pantalla de resultado
+4. la pantalla de resultado debe de ser un componente reusable y usarse para la pagina de busqeueda y para la de detalle
+5. agregar estilos
