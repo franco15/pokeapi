@@ -10,3 +10,9 @@ usar solo vanilla js
 3. al seleionar un pokemon de la lista debeb de mostrarte su informacion en una pantalla de resultado
 4. la pantalla de resultado debe de ser un componente reusable y usarse para la pagina de busqeueda y para la de detalle
 5. agregar estilos
+
+v2 -
+- Agregar routing, tener ruta home/ lista pokemon Y detail/[pokemonName||pokemonId], esto con conditional render
+desde el index.html
+- agregar scroll
+- añadir mas estilos

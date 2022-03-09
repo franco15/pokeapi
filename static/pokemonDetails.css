@@ -56,3 +56,11 @@ table, th, td {
 .pokemon-image {
     height: 300px;
 }
+
+label, input {
+    display: block;
+}
+
+.mb-5 {
+    margin-bottom: 5px;
+}
