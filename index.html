@@ -140,13 +140,14 @@
     }
 
     async function changeTotal() {
-        const amount = document.getElementById("amount").value;
+        amount = document.getElementById("amount").value;
         const skip = 0;
         const response = await fetch(`https://pokeapi.co/api/v2/pokemon/?limit=${amount}`);
         const json = await response.json();
         totalPokemon = json.count;
         const pokemon = json.results;
         await fillTable(pokemon);
+        createPagination(totalPokemon, amount);
     }
 
     function searchPokemon() {

@@ -1,6 +1,4 @@
 async function createPagination(total, amount) {
-    console.log(total);
-    console.log(amount);
     const pages = Math.ceil(total / amount);
     const paginationDiv = document.getElementById("pages");
     paginationDiv.innerHTML = "";
