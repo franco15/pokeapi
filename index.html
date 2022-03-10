@@ -24,22 +24,22 @@
                         <option value="20">20</option>
                     </select>
                 </div>
-                <!-- <div class="row">
-                    <div class="pagination">
-                        <a href="#">&laquo;</a>
-                        <a href="#">1</a>
-                        <a class="active" href="#">2</a>
-                        <a href="#">3</a>
-                        <a href="#">4</a>
-                        <a href="#">5</a>
-                        <a href="#">6</a>
-                        <a href="#">&raquo;</a>
-                      </div>
-                </div> -->
                 <div>
                     <label for="search-pokemon" class="mb-5">Search Pokemon</label>
                     <input type="text" id="search-pokemon" class="mb-5">
                     <button onclick="searchPokemon()">Search</button>
+                </div>
+                <div class="row">
+                    <div class="pagination" id="pages">
+                        <!-- <a href="#">&laquo;</a> -->
+                        <!-- <a href="#">1</a>
+                        <a class="active" href="#">2</a>
+                        <a href="#">3</a>
+                        <a href="#">4</a>
+                        <a href="#">5</a>
+                        <a href="#">6</a> -->
+                        <!-- <a href="#">&raquo;</a> -->
+                      </div>
                 </div>
             </div>
         </div>
@@ -65,9 +65,11 @@
 </body>
 <script src="/static/pokemonDetails.js"></script>
 <script src="/static/router.js"></script>
+<script src="/static/pagination.js"></script>
 <script>
     let totalPokemon = 0;
     let selectedPokemon = "";
+    let amount = 10;
     const searchInput = document.getElementById("search-pokemon");
     searchInput.addEventListener("keyup", event => {
         event.preventDefault();
@@ -75,15 +77,14 @@
             searchPokemon();
         }
     });
-    async function getPokemon() {
+
+    async function loadPokemon() {
         const route = await router();
         const param = getParams(route);
-        console.log(param);
         selectedPokemon = param.name;
-        const amount = document.getElementById("amount").value;
+        amount = document.getElementById("amount").value;
         const skip = 0;
-        const response = await fetch(`https://pokeapi.co/api/v2/pokemon/?limit=${amount}&offset=${skip}`);
-        const json = await response.json();
+        const json = await getPokemonJson(skip, amount);
         totalPokemon = json.count;
         const pokemon = json.results;
         selectedPokemon = param.name ?? pokemon[0].name;
@@ -92,8 +93,15 @@
         details.setAttribute("name", selectedPokemon);
         detailsDiv.appendChild(details);
         await fillTable(pokemon);
+        createPagination(totalPokemon, amount);
     }
-    getPokemon();
+    loadPokemon();
+
+    async function getPokemonJson(skip, amount) {
+        const response = await fetch(`https://pokeapi.co/api/v2/pokemon/?limit=${amount}&offset=${skip}`);
+        const json = await response.json();
+        return json;
+    }
 
     async function fillTable(pokemon) {
         const tbody = document.getElementById("pokemon-list");
@@ -153,7 +161,6 @@
         const details = document.createElement("pokemon-details");
         details.setAttribute("name", query);
         detailsDiv.appendChild(details);
-
     }
 
 </script>

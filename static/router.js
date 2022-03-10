@@ -1,7 +1,6 @@
 const pathToRegex = path => new RegExp("^" + path.replace(/\//g, "\\/").replace(/:\w+/g, "(.+)") + "$");
 
 const router = async () => {
-    console.log("router");
     const routes = [
         { path: "/" },
         { path: "/detail/:name" },
@@ -31,7 +30,6 @@ const navigateTo = url => {
 }
 
 const getParams = match => {
-    console.log(match);
     const values = match.result.slice(1);
     const keys = Array.from(match.route.path.matchAll(/:(\w+)/g)).map(result => result[1]);
 
